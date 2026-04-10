@@ -21,5 +21,5 @@ public class MovieStatus {
     private String name;
 
     @OneToMany(mappedBy = "status")
-    private Set<FavoriteMovie> userMovies = new HashSet<>();
+    private Set<Movie> userMovies = new HashSet<>();
 }

@@ -1,14 +1,15 @@
 package ru.reel.CollectionService.dto;
 
-import ru.reel.CollectionService.entity.FavoriteMovie;
-
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 public class CollectionDto {
     public String id;
     public String name;
+    public short priority;
+    public Date createdAt;
     public String ownerId;
-    public PermissionDto permission;
-    public Set<FavoriteMovieDto> favoriteMovies = new HashSet<>();
+    public CollectionScopeDto scope;
+    public Set<MovieDto> movies = new HashSet<>();
 }

@@ -11,8 +11,8 @@ import java.util.UUID;
 @Setter
 @Getter
 @Entity
-@Table(name = "permissions")
-public class Permission {
+@Table(name = "collection_scopes")
+public class CollectionScope {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -20,6 +20,6 @@ public class Permission {
     @Column(name = "title", length = 15, nullable = false, unique = true)
     private String title;
 
-    @OneToMany(mappedBy = "permission")
+    @OneToMany(mappedBy = "scope")
     private Set<Collection> collections = new HashSet<>();
 }

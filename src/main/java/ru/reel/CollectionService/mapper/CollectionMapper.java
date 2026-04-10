@@ -8,35 +8,41 @@ import java.util.stream.Collectors;
 
 @Component
 public class CollectionMapper implements Mapper<CollectionDto, Collection> {
-    private final PermissionMapper permissionMapper;
-    private final FavoriteMovieMapper favoriteMovieMapper;
+    private final CollectionScopeMapper collectionScopeMapper;
 
-    public CollectionMapper(PermissionMapper permissionMapper, FavoriteMovieMapper favoriteMovieMapper) {
-        this.permissionMapper = permissionMapper;
-        this.favoriteMovieMapper = favoriteMovieMapper;
+    public CollectionMapper(CollectionScopeMapper collectionScopeMapper) {
+        this.collectionScopeMapper = collectionScopeMapper;
     }
 
     @Override
-    public Collection from(CollectionDto dto) {
+    public Collection from(CollectionDto dto) throws IllegalArgumentException {
         if(dto == null)
             return null;
         Collection entity = new Collection();
         entity.setName(dto.name);
+        entity.setPriority(dto.priority);
         entity.setOwnerId(dto.ownerId);
-        entity.setPermission(permissionMapper.from(dto.permission));
+        entity.setScope(collectionScopeMapper.from(dto.scope));
         return entity;
     }
 
     @Override
     public CollectionDto to(Collection entity) {
+        return to(entity, false, null);
+    }
+
+    public CollectionDto to(Collection entity, boolean isDeepMapping, MovieMapper movieMapper) {
         if(entity == null)
             return null;
         CollectionDto dto = new CollectionDto();
         dto.id = entity.getId().toString();
         dto.name = entity.getName();
+        dto.priority = entity.getPriority();
+        dto.createdAt = entity.getCreatedAt();
         dto.ownerId = entity.getOwnerId();
-        dto.permission = permissionMapper.to(entity.getPermission());
-        dto.favoriteMovies = entity.getFavoriteMovies().stream().map(favoriteMovieMapper::to).collect(Collectors.toSet());
+        dto.scope = collectionScopeMapper.to(entity.getScope());
+        if(isDeepMapping)
+            dto.movies = entity.getMovies().stream().map(movieMapper::to).collect(Collectors.toSet());
         return dto;
     }
 }
