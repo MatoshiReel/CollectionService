@@ -32,10 +32,10 @@ public class Collection {
     private String ownerId;
 
     @ManyToOne
-    @JoinColumn(name = "collection_scope _id")
+    @JoinColumn(name = "collection_scope_id")
     private CollectionScope scope;
 
-    @OneToMany(mappedBy = "collection")
+    @OneToMany(mappedBy = "collection", fetch = FetchType.EAGER)
     private Set<CollectionStar> userStars = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)

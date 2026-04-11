@@ -14,6 +14,7 @@ public enum ErrorReason {
     NOT_FOUND,
     SCOPE,
     OWNER_ACCESS,
+    NOT_ALLOW,
     LESS_SIZE,
     GREATER_SIZE
 }

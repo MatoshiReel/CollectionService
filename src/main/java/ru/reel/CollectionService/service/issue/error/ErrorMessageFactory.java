@@ -25,6 +25,7 @@ public class ErrorMessageFactory {
             case OWNER_ACCESS -> "You don't have access for this request, because you are not the owner of this %s.";
             case LESS_SIZE -> "%s can't has value less then %.2f.";
             case GREATER_SIZE -> "%s can't has value greater then %.2f.";
+            case NOT_ALLOW -> "%s is not allow for this user.";
         };
     }
 }
