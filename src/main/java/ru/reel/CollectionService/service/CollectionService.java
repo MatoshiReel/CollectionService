@@ -56,10 +56,10 @@ public class CollectionService {
         return repository.findById(UUID.fromString(id)).orElseThrow(() -> new SourceNotFoundException("collection"));
     }
 
-    public List<Collection> getByOwnerId(String ownerId) throws NullPointerException {
+    public List<Collection> getByOwnerId(String ownerId) throws NullPointerException, IllegalArgumentException {
         if(ownerId == null)
             throw  new NullPointerException();
-        return repository.findAllByOwnerId(ownerId);
+        return repository.findAllByOwnerId(UUID.fromString(ownerId));
     }
 
     public void deleteById(String id) throws NullPointerException, IllegalArgumentException {

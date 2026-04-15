@@ -53,14 +53,14 @@ public class MovieService {
         return savedMovie.get().getId().toString();
     }
 
-    public Movie getByCatalogIdAndOwnerId(String catalogId, String ownerId) {
-        return repository.findIdByCatalogIdAndCollectionsOwnerId(catalogId, ownerId).flatMap(movies -> movies.stream().findAny()).orElse(null);
+    public Movie getByCatalogIdAndOwnerId(String catalogId, String ownerId) throws IllegalArgumentException {
+        return repository.findIdByCatalogIdAndCollectionsOwnerId(UUID.fromString(catalogId), UUID.fromString(ownerId)).flatMap(movies -> movies.stream().findAny()).orElse(null);
     }
 
     public String getOwnerId(Movie movie) throws SourceNotFoundException {
         if(movie == null)
             throw new NullPointerException();
-        return movie.getCollections().stream().findAny().orElseThrow(() -> new SourceNotFoundException("collection")).getOwnerId();
+        return movie.getCollections().stream().findAny().orElseThrow(() -> new SourceNotFoundException("collection")).getOwnerId().toString();
     }
 
     public Movie getById(String id) throws NullPointerException, IllegalArgumentException, SourceNotFoundException {

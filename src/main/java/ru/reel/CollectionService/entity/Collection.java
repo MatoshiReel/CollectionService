@@ -29,7 +29,7 @@ public class Collection {
     private Date createdAt = new Date();
 
     @Column(name = "owner_id", nullable = false)
-    private String ownerId;
+    private UUID ownerId;
 
     @ManyToOne
     @JoinColumn(name = "collection_scope_id")

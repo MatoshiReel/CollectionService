@@ -1,7 +1,6 @@
 package ru.reel.CollectionService.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +21,7 @@ public class Movie {
     private double ownerRating;
 
     @Column(name = "catalog_movie_id", nullable = false)
-    private String catalogId;
+    private UUID catalogId;
 
     @ManyToOne
     @JoinColumn(name = "status_id")

@@ -10,5 +10,5 @@ import java.util.UUID;
 
 @Repository
 public interface CollectionStarRepository extends CrudRepository<CollectionStar, UUID> {
-    Optional<CollectionStar> findByUserIdAndCollectionIs(String userId, Collection collection);
+    Optional<CollectionStar> findByUserIdAndCollectionIs(UUID userId, Collection collection);
 }

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import ru.reel.CollectionService.dto.CollectionDto;
 import ru.reel.CollectionService.entity.Collection;
 
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -16,12 +17,18 @@ public class CollectionMapper implements Mapper<CollectionDto, Collection> {
 
     @Override
     public Collection from(CollectionDto dto) throws IllegalArgumentException {
+        return from(dto, false);
+    }
+
+    public Collection from(CollectionDto dto, boolean isIdInclude) throws IllegalArgumentException {
         if(dto == null)
             return null;
         Collection entity = new Collection();
+        if(isIdInclude && dto.id != null)
+            entity.setId(UUID.fromString(dto.id));
         entity.setName(dto.name);
         entity.setOrder(dto.order);
-        entity.setOwnerId(dto.ownerId);
+        entity.setOwnerId(UUID.fromString(dto.ownerId));
         entity.setScope(collectionScopeMapper.from(dto.scope));
         return entity;
     }
@@ -39,7 +46,7 @@ public class CollectionMapper implements Mapper<CollectionDto, Collection> {
         dto.name = entity.getName();
         dto.order = entity.getOrder();
         dto.createdAt = entity.getCreatedAt();
-        dto.ownerId = entity.getOwnerId();
+        dto.ownerId = entity.getOwnerId().toString();
         dto.scope = collectionScopeMapper.to(entity.getScope());
         if(isDeepMapping)
             dto.movies = entity.getMovies().stream().map(movieMapper::to).collect(Collectors.toSet());

@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 import ru.reel.CollectionService.dto.CollectionStarDto;
 import ru.reel.CollectionService.entity.CollectionStar;
 
+import java.util.UUID;
+
 @Component
 public class CollectionStarMapper implements Mapper<CollectionStarDto, CollectionStar> {
     @Override
@@ -11,7 +13,7 @@ public class CollectionStarMapper implements Mapper<CollectionStarDto, Collectio
         if(dto == null)
             return null;
         CollectionStar entity = new CollectionStar();
-        entity.setUserId(dto.userId);
+        entity.setUserId(UUID.fromString(dto.userId));
         return entity;
     }
 
@@ -21,7 +23,7 @@ public class CollectionStarMapper implements Mapper<CollectionStarDto, Collectio
             return null;
         CollectionStarDto dto = new CollectionStarDto();
         dto.id = entity.getId().toString();
-        dto.userId = entity.getUserId();
+        dto.userId = entity.getUserId().toString();
         dto.collectionId = entity.getCollection().getId().toString();
         return dto;
     }

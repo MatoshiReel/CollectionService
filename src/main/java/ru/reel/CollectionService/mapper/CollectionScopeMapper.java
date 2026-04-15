@@ -15,6 +15,7 @@ public class CollectionScopeMapper implements Mapper<CollectionScopeDto, Collect
         CollectionScope entity = new CollectionScope();
         if(dto.id != null) entity.setId(UUID.fromString(dto.id));
         entity.setPriority(dto.priority);
+        entity.setTitle(dto.title);
         return entity;
     }
 

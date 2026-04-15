@@ -1,6 +1,6 @@
 package ru.reel.CollectionService.dto.criteria;
 
-public class Page {
+public class PageCriteria {
     public short index;
     public short items;
 }

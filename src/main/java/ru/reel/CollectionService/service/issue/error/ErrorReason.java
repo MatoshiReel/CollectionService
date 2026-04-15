@@ -9,7 +9,7 @@ public enum ErrorReason {
     PATTERN,
     BAD_UUID,
     BAD_DATA_TYPE,
-    NOT_MATCH,
+    NOT_SUIT,
     NOT_EXIST,
     NOT_FOUND,
     SCOPE,

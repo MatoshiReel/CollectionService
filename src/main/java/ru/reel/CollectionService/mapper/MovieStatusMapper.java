@@ -15,6 +15,7 @@ public class MovieStatusMapper implements Mapper<MovieStatusDto, MovieStatus> {
         MovieStatus entity = new MovieStatus();
         if(dto.id != null) entity.setId(UUID.fromString(dto.id));
         entity.setOrder(dto.order);
+        entity.setName(dto.name);
         return entity;
     }
 

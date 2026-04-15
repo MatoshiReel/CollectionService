@@ -1,14 +1,19 @@
-package ru.reel.CollectionService.service.sort;
+package ru.reel.CollectionService.service.criteria;
 
-import org.springframework.stereotype.Component;
 import ru.reel.CollectionService.entity.Collection;
+import ru.reel.CollectionService.service.exception.UnsuitableCriteriaValueException;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-public class CollectionSorter {
+public class CollectionCriteria {
     public static SorterBuilder sort(List<Collection> list) {
         return new SorterBuilder(list);
+    }
+
+    public static PageBuilder page(List<Collection> list) {
+        return new PageBuilder(list);
     }
 
     public static class SorterBuilder {
@@ -74,19 +79,31 @@ public class CollectionSorter {
             return this;
         }
 
-        public SorterBuilder field(SortedField field) {
-            return switch (field) {
-                case ORDER -> this.order();
-                case CREATED_AT -> this.createdAt();
-                case NAME -> this.name();
-            };
+        public SorterBuilder field(String field) throws UnsuitableCriteriaValueException {
+            if(field == null)
+                return this;
+            try {
+                return switch (SortedField.valueOf(field.toUpperCase())) {
+                    case ORDER -> this.order();
+                    case CREATED_AT -> this.createdAt();
+                    case NAME -> this.name();
+                };
+            } catch (IllegalArgumentException e) {
+                throw new UnsuitableCriteriaValueException("sort.field", Arrays.stream(SortedField.values()).map(Enum::name).toList());
+            }
         }
 
-        public SorterBuilder order(OrderType orderType) {
-            return switch(orderType) {
-                case OrderType.DESC -> this.desc();
-                case OrderType.ASC -> this.asc();
-            };
+        public SorterBuilder order(String orderType) throws UnsuitableCriteriaValueException {
+            if(orderType == null)
+                return this;
+            try {
+                return switch(OrderType.valueOf(orderType.toUpperCase())) {
+                    case OrderType.DESC -> this.desc();
+                    case OrderType.ASC -> this.asc();
+                };
+            } catch (IllegalArgumentException e) {
+                throw new UnsuitableCriteriaValueException("sort.order", Arrays.stream(OrderType.values()).map(Enum::name).toList());
+            }
         }
 
         public SorterBuilder desc() {
@@ -108,16 +125,30 @@ public class CollectionSorter {
         public List<Collection> get() {
             return this.list;
         }
+
+        private enum SortedField {
+            ORDER,
+            CREATED_AT,
+            NAME
+        }
+
+        private enum OrderType {
+            ASC,
+            DESC
+        }
     }
 
-    public enum SortedField {
-        ORDER,
-        CREATED_AT,
-        NAME
-    }
+    public static class PageBuilder {
+        private List<Collection> list;
 
-    public enum OrderType {
-        ASC,
-        DESC
+        public PageBuilder(List<Collection> list) {
+            this.list = list;
+        }
+
+        public List<Collection> get(short index, short itemsCount) {
+            if(index >= 0 && itemsCount >= 0)
+                this.list = this.list.stream().skip(index*itemsCount).limit(itemsCount).toList();
+            return this.list;
+        }
     }
 }

@@ -18,13 +18,13 @@ public class CollectionStar {
     private UUID id;
 
     @Column(name = "user_id", nullable = false)
-    private String userId;
+    private UUID userId;
 
     @ManyToOne
     @JoinColumn(name = "collection_id")
     private Collection collection;
 
-    public CollectionStar(String userId, Collection collection) {
+    public CollectionStar(UUID userId, Collection collection) {
         this.userId = userId;
         this.collection = collection;
     }

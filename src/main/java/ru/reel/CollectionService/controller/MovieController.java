@@ -71,7 +71,7 @@ public class MovieController {
         try {
             movieDto = movieMapper.to(movieService.getByCatalogIdAndOwnerId(catalogMovieId, accountId), true, collectionMapper);
         } catch(IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(RequestError.builder().errorReason(ErrorReason.BAD_UUID).message(ErrorMessageFactory.get(ErrorReason.BAD_UUID)).build());
+            return ResponseEntity.badRequest().body(ParamRequestError.builder().param("catalog_id").errorReason(ErrorReason.BAD_UUID).message(ErrorMessageFactory.get(ErrorReason.BAD_UUID)).build());
         }
         if(movieDto == null)
             return ResponseEntity.notFound().build();

@@ -25,7 +25,7 @@ public class CollectionValidator implements Validator<CollectionDto, FieldReques
             errors.add(FieldRequestError.builder().field("name").errorReason(ErrorReason.PATTERN).message(String.format(ErrorMessageFactory.get(ErrorReason.PATTERN), "name", ALLOW_PATTERN)).build());
         }
         if(hasOrderLessValue(dto.order)) {
-            errors.add(FieldRequestError.builder().field("order").errorReason(ErrorReason.LESS_SIZE).message(String.format(ErrorMessageFactory.get(ErrorReason.LESS_SIZE), "order", MIN_ORDER_VALUE)).build());
+            errors.add(FieldRequestError.builder().field("order").errorReason(ErrorReason.LESS_SIZE).message(String.format(ErrorMessageFactory.get(ErrorReason.LESS_SIZE), "order", (double) MIN_ORDER_VALUE)).build());
         }
         if(isEmpty(dto.scope)) {
             errors.add(FieldRequestError.builder().field("scope").errorReason(ErrorReason.EMPTY).message(String.format(ErrorMessageFactory.get(ErrorReason.EMPTY), "scope")).build());
@@ -36,7 +36,7 @@ public class CollectionValidator implements Validator<CollectionDto, FieldReques
             } else if(!isEmpty(dto.scope.id) && !isUuidFormat(dto.scope.id)) {
                 errors.add(FieldRequestError.builder().field("scope.id").errorReason(ErrorReason.BAD_UUID).message(ErrorMessageFactory.get(ErrorReason.BAD_UUID)).build());
             } else if(!isEmpty(dto.scope.priority) && hasScopePriorityLessValue(dto.scope.priority)) {
-                errors.add(FieldRequestError.builder().field("scope.priority").errorReason(ErrorReason.LESS_SIZE).message(String.format(ErrorMessageFactory.get(ErrorReason.LESS_SIZE), "scope.priority", MIN_SCOPE_PRIORITY_VALUE)).build());
+                errors.add(FieldRequestError.builder().field("scope.priority").errorReason(ErrorReason.LESS_SIZE).message(String.format(ErrorMessageFactory.get(ErrorReason.LESS_SIZE), "scope.priority", (double) MIN_SCOPE_PRIORITY_VALUE)).build());
             }
         }
         return errors;

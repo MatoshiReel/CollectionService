@@ -7,6 +7,8 @@ import ru.reel.CollectionService.service.CollectionScopeService;
 import ru.reel.CollectionService.service.CollectionService;
 import ru.reel.CollectionService.service.exception.SourceNotFoundException;
 
+import java.util.UUID;
+
 @Component
 public class UserRegisteredEventHandler {
     private final CollectionService collectionService;
@@ -21,7 +23,7 @@ public class UserRegisteredEventHandler {
     public void handle(String userId) throws SourceNotFoundException {
         Collection collection = new Collection();
         collection.setName("Избранное");
-        collection.setOwnerId(userId);
+        collection.setOwnerId(UUID.fromString(userId));
         collection.setOrder((short) 1);
         collection.setScope(collectionScopeService.getByPriority((short) 1));
         collectionService.save(collection);
