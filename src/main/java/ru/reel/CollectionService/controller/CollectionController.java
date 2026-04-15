@@ -54,6 +54,9 @@ public class CollectionController {
                     .field(criteria.sort)
                     .order(criteria.order)
                     .get().stream().map(collectionMapper::to).toList();
+            if(criteria.page != null) {
+                sortedCollectionsDto = sortedCollectionsDto.stream().skip(criteria.page.index * criteria.page.items).limit(criteria.page.items).toList();
+            }
         } else {
             sortedCollectionsDto = collectionService.getByOwnerId(accountId).stream().map(collectionMapper::to).toList();
         }

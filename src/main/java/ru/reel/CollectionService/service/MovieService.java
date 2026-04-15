@@ -28,7 +28,9 @@ public class MovieService {
             throw new NullPointerException();
         Optional<Set<Movie>> savedFavoriteMovieUuids = repository.findIdByCatalogIdAndCollectionsOwnerId(movie.getCatalogId(), collection.getOwnerId());
         savedFavoriteMovieUuids.flatMap(movies -> movies.stream().findAny()).ifPresent(savedMovie -> movie.setId(savedMovie.getId()));
-        MovieStatus movieStatus = movieStatusService.getById(movie.getStatus().getId().toString());
+        MovieStatus movieStatus;
+        if(movie.getStatus().getId() != null) movieStatus = movieStatusService.getById(movie.getStatus().getId().toString());
+        else movieStatus = movieStatusService.getByOrder(movie.getStatus().getOrder());
         movie.setStatus(movieStatus);
         repository.save(movie);
         collection.getMovies().add(movie);
@@ -44,7 +46,8 @@ public class MovieService {
             if(movie.getOwnerRating() != 0.0)
                 savedMovie.get().setOwnerRating(movie.getOwnerRating());
             if(movie.getStatus() != null)
-                savedMovie.get().setStatus(movieStatusService.getById(movie.getStatus().getId().toString()));
+                if(movie.getStatus().getId() != null) savedMovie.get().setStatus(movieStatusService.getById(movie.getStatus().getId().toString()));
+                else savedMovie.get().setStatus(movieStatusService.getByOrder(movie.getStatus().getOrder()));
         }
         repository.save(savedMovie.orElseThrow(() -> new SourceNotFoundException(("movie"))));
         return savedMovie.get().getId().toString();

@@ -20,6 +20,9 @@ public class CollectionScope {
     @Column(name = "title", length = 15, nullable = false, unique = true)
     private String title;
 
+    @Column(name = "priority", nullable = false, unique = true)
+    private short priority;
+
     @OneToMany(mappedBy = "scope")
     private Set<Collection> collections = new HashSet<>();
 }

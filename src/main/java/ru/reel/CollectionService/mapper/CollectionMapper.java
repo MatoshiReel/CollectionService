@@ -20,7 +20,7 @@ public class CollectionMapper implements Mapper<CollectionDto, Collection> {
             return null;
         Collection entity = new Collection();
         entity.setName(dto.name);
-        entity.setPriority(dto.priority);
+        entity.setOrder(dto.order);
         entity.setOwnerId(dto.ownerId);
         entity.setScope(collectionScopeMapper.from(dto.scope));
         return entity;
@@ -37,7 +37,7 @@ public class CollectionMapper implements Mapper<CollectionDto, Collection> {
         CollectionDto dto = new CollectionDto();
         dto.id = entity.getId().toString();
         dto.name = entity.getName();
-        dto.priority = entity.getPriority();
+        dto.order = entity.getOrder();
         dto.createdAt = entity.getCreatedAt();
         dto.ownerId = entity.getOwnerId();
         dto.scope = collectionScopeMapper.to(entity.getScope());

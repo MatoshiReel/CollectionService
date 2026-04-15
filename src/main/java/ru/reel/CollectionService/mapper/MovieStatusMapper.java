@@ -13,7 +13,8 @@ public class MovieStatusMapper implements Mapper<MovieStatusDto, MovieStatus> {
         if(dto == null)
             return null;
         MovieStatus entity = new MovieStatus();
-        entity.setId(UUID.fromString(dto.id));
+        if(dto.id != null) entity.setId(UUID.fromString(dto.id));
+        entity.setOrder(dto.order);
         return entity;
     }
 
@@ -24,6 +25,7 @@ public class MovieStatusMapper implements Mapper<MovieStatusDto, MovieStatus> {
         MovieStatusDto dto = new MovieStatusDto();
         dto.id = entity.getId().toString();
         dto.name = entity.getName();
+        dto.order = entity.getOrder();
         return dto;
     }
 }

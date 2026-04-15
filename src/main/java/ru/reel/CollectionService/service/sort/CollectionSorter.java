@@ -32,17 +32,17 @@ public class CollectionSorter {
             return this;
         }
 
-        public SorterBuilder priority() {
+        public SorterBuilder order() {
             if(!isReversed) {
-                this.list.sort(Comparator.comparingInt(Collection::getPriority));
+                this.list.sort(Comparator.comparingInt(Collection::getOrder));
                 this.isSorted = true;
             }
             return this;
         }
 
-        public SorterBuilder priority(boolean isActivated) {
+        public SorterBuilder order(boolean isActivated) {
             if(isActivated)
-                return this.priority();
+                return this.order();
             return this;
         }
 
@@ -76,7 +76,7 @@ public class CollectionSorter {
 
         public SorterBuilder field(SortedField field) {
             return switch (field) {
-                case PRIORITY -> this.priority();
+                case ORDER -> this.order();
                 case CREATED_AT -> this.createdAt();
                 case NAME -> this.name();
             };
@@ -111,7 +111,7 @@ public class CollectionSorter {
     }
 
     public enum SortedField {
-        PRIORITY,
+        ORDER,
         CREATED_AT,
         NAME
     }

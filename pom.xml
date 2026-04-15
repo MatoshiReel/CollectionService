@@ -74,6 +74,12 @@
 			<scope>compile</scope>
 		</dependency>
 
+		<!-- Messaging -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-kafka</artifactId>
+		</dependency>
+
 		<!-- Testing -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -22,8 +22,8 @@ public class Collection {
     @Column(name = "name", length = 35, nullable = false)
     private String name;
 
-    @Column(name = "priority")
-    private short priority;
+    @Column(name = "display_order")
+    private short order;
 
     @Column(name = "created_at")
     private Date createdAt = new Date();

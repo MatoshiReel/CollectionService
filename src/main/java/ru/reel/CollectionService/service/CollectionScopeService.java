@@ -25,4 +25,8 @@ public class CollectionScopeService {
             throw new NullPointerException();
         return repository.findById(UUID.fromString(id)).orElseThrow(() -> new SourceNotFoundException("scope"));
     }
+
+    public CollectionScope getByPriority(short priority) throws SourceNotFoundException {
+        return repository.findByPriority(priority).orElseThrow(() -> new SourceNotFoundException("scope"));
+    }
 }

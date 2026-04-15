@@ -7,7 +7,7 @@ import java.util.Set;
 public class CollectionDto {
     public String id;
     public String name;
-    public short priority;
+    public short order;
     public Date createdAt;
     public String ownerId;
     public CollectionScopeDto scope;

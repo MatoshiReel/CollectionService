@@ -20,6 +20,9 @@ public class MovieStatus {
     @Column(name = "name", length = 25, nullable = false, unique = true)
     private String name;
 
+    @Column(name = "display_order", nullable = false, unique = true)
+    private short order;
+
     @OneToMany(mappedBy = "status")
     private Set<Movie> movies = new HashSet<>();
 }

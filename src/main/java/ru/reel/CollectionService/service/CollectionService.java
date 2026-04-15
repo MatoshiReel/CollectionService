@@ -24,7 +24,9 @@ public class CollectionService {
     public String save(Collection collection) throws NullPointerException, IllegalArgumentException, SourceNotFoundException {
         if(collection == null || collection.getScope() == null)
             throw new NullPointerException();
-        CollectionScope scope = collectionScopeService.getById(collection.getScope().getId().toString());
+        CollectionScope scope;
+        if(collection.getScope().getId() != null) scope = collectionScopeService.getById(collection.getScope().getId().toString());
+        else scope = collectionScopeService.getByPriority(collection.getScope().getPriority());
         collection.setScope(scope);
         repository.save(collection);
         return collection.getId().toString();
@@ -37,10 +39,11 @@ public class CollectionService {
         if(savedCollection.isPresent()) {
             if(collection.getName() != null)
                 savedCollection.get().setName(collection.getName());
-            if(collection.getPriority() != 0.0)
-                savedCollection.get().setPriority(collection.getPriority());
+            if(collection.getOrder() != 0.0)
+                savedCollection.get().setOrder(collection.getOrder());
             if(collection.getScope() != null) {
-                savedCollection.get().setScope(collectionScopeService.getById(collection.getScope().getId().toString()));
+                if(collection.getScope().getId() != null) savedCollection.get().setScope(collectionScopeService.getById(collection.getScope().getId().toString()));
+                else savedCollection.get().setScope(collectionScopeService.getByPriority(collection.getScope().getPriority()));
             }
         }
         repository.save(savedCollection.orElseThrow(() -> new SourceNotFoundException("collection")));

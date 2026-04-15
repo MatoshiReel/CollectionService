@@ -13,7 +13,8 @@ public class CollectionScopeMapper implements Mapper<CollectionScopeDto, Collect
         if(dto == null)
             return null;
         CollectionScope entity = new CollectionScope();
-        entity.setId(UUID.fromString(dto.id));
+        if(dto.id != null) entity.setId(UUID.fromString(dto.id));
+        entity.setPriority(dto.priority);
         return entity;
     }
 
@@ -24,6 +25,7 @@ public class CollectionScopeMapper implements Mapper<CollectionScopeDto, Collect
         CollectionScopeDto dto = new CollectionScopeDto();
         dto.id = entity.getId().toString();
         dto.title = entity.getTitle();
+        dto.priority = entity.getPriority();
         return dto;
     }
 }

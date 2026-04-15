@@ -23,8 +23,8 @@ public class ErrorMessageFactory {
             case NOT_FOUND -> "%s isn't found.";
             case SCOPE -> "This %s has %s scope, which doesn't allow you.";
             case OWNER_ACCESS -> "You don't have access for this request, because you are not the owner of this %s.";
-            case LESS_SIZE -> "%s can't has value less then %.2f.";
-            case GREATER_SIZE -> "%s can't has value greater then %.2f.";
+            case LESS_SIZE -> "%s can't has value less then %d.";
+            case GREATER_SIZE -> "%s can't has value greater then %d.";
             case NOT_ALLOW -> "%s is not allow for this user.";
         };
     }

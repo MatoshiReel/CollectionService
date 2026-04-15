@@ -25,4 +25,8 @@ public class MovieStatusService {
             throw new NullPointerException();
         return repository.findById(UUID.fromString(id)).orElseThrow(() -> new SourceNotFoundException("status"));
     }
+
+    public MovieStatus getByOrder(short order) throws SourceNotFoundException {
+        return repository.findByOrder(order).orElseThrow(() -> new SourceNotFoundException("status"));
+    }
 }
