@@ -12,9 +12,9 @@ import java.util.UUID;
 
 @Component
 public class MovieValidator implements Validator<MovieDto, FieldRequestError> {
-    public static final double MIN_RATING_VALUE = 1.0;
-    public static final double MAX_RATING_VALUE = 10.0;
-    public static final short MIN_STATUS_ORDER_VALUE = 1;
+    private static final double MIN_RATING_VALUE = 1.0;
+    private static final double MAX_RATING_VALUE = 10.0;
+    private static final short MIN_STATUS_ORDER_VALUE = 1;
     @Override
     public List<FieldRequestError> validateBeforeCreating(MovieDto dto) {
         List<FieldRequestError> errors = new ArrayList<>();

@@ -1,5 +1,6 @@
 package ru.reel.CollectionService.controller;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +56,7 @@ public class MovieController {
                 return ResponseEntity.notFound().build();
             else if (!movieDto.collections.stream().findAny().orElseThrow(() -> new SourceNotFoundException("collection")).ownerId.equals(accountId))
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(RequestError.builder().errorReason(ErrorReason.OWNER_ACCESS).message(String.format(ErrorMessageFactory.get(ErrorReason.OWNER_ACCESS), "collection")).build());
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(RequestError.builder().errorReason(ErrorReason.BAD_UUID).message(ErrorMessageFactory.get(ErrorReason.BAD_UUID)).build());
         } catch (SourceNotFoundException e) {
             return ResponseEntity.badRequest().body(RequestError.builder().errorReason(ErrorReason.NOT_FOUND).message(String.format(ErrorMessageFactory.get(ErrorReason.NOT_FOUND), e.getSource())).build());

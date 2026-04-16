@@ -1,5 +1,6 @@
 package ru.reel.CollectionService.service.validator;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.stereotype.Component;
 import ru.reel.CollectionService.dto.CollectionDto;
 import ru.reel.CollectionService.service.issue.error.ErrorMessageFactory;
@@ -12,9 +13,9 @@ import java.util.UUID;
 
 @Component
 public class CollectionValidator implements Validator<CollectionDto, FieldRequestError> {
-    public static final String ALLOW_PATTERN = "а-я А-Я a-z A-Z _ - . [space]";
-    public static final short MIN_ORDER_VALUE = 1;
-    public static final short MIN_SCOPE_PRIORITY_VALUE = 1;
+    private static final String ALLOW_PATTERN = "а-я А-Я a-z A-Z _ - . [space]";
+    private static final short MIN_ORDER_VALUE = 1;
+    private static final short MIN_SCOPE_PRIORITY_VALUE = 1;
 
     @Override
     public List<FieldRequestError> validateBeforeCreating(CollectionDto dto) {
