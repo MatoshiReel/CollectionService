@@ -10,6 +10,7 @@ import java.util.UUID;
 
 @Service
 public class CollectionScopeService {
+    public static final String SOURCE_NAME = "scope";
     private final CollectionScopeRepository repository;
 
     public CollectionScopeService(CollectionScopeRepository repository) {
@@ -23,10 +24,10 @@ public class CollectionScopeService {
     public CollectionScope getById(String id) throws NullPointerException, IllegalArgumentException, SourceNotFoundException {
         if(id == null)
             throw new NullPointerException();
-        return repository.findById(UUID.fromString(id)).orElseThrow(() -> new SourceNotFoundException("scope"));
+        return repository.findById(UUID.fromString(id)).orElseThrow(() -> new SourceNotFoundException(SOURCE_NAME));
     }
 
     public CollectionScope getByPriority(short priority) throws SourceNotFoundException {
-        return repository.findByPriority(priority).orElseThrow(() -> new SourceNotFoundException("scope"));
+        return repository.findByPriority(priority).orElseThrow(() -> new SourceNotFoundException(SOURCE_NAME));
     }
 }

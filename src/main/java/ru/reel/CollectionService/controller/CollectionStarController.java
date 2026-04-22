@@ -49,7 +49,7 @@ public class CollectionStarController {
         if(collectionId == null || collectionId.isEmpty())
             return ResponseEntity.badRequest().body(ParamRequestError.builder().param("collectin_id").errorReason(ErrorReason.EMPTY).message(String.format(ErrorMessageFactory.get(ErrorReason.EMPTY), "collection_id")).build());
         try {
-            collectionStarService.save(accountId, collectionService.getById(collectionId));
+            collectionStarService.save(accountId, collectionId);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(ParamRequestError.builder().param("collection_id").errorReason(ErrorReason.BAD_UUID).message(ErrorMessageFactory.get(ErrorReason.BAD_UUID)).build());
         } catch (SourceNotFoundException e) {
@@ -65,7 +65,7 @@ public class CollectionStarController {
         if(collectionId == null || collectionId.isEmpty())
             return ResponseEntity.badRequest().body(ParamRequestError.builder().param("collectin_id").errorReason(ErrorReason.EMPTY).message(String.format(ErrorMessageFactory.get(ErrorReason.EMPTY), "collection_id")).build());
         try {
-            collectionStarService.delete(accountId, collectionService.getById(collectionId));
+            collectionStarService.delete(accountId, collectionId);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(ParamRequestError.builder().param("collection_id").errorReason(ErrorReason.BAD_UUID).message(ErrorMessageFactory.get(ErrorReason.BAD_UUID)).build());
         } catch (SourceNotFoundException e) {

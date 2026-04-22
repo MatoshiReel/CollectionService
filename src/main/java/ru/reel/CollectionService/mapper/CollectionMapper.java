@@ -28,7 +28,7 @@ public class CollectionMapper implements Mapper<CollectionDto, Collection> {
             entity.setId(UUID.fromString(dto.id));
         entity.setName(dto.name);
         entity.setOrder(dto.order);
-        entity.setOwnerId(UUID.fromString(dto.ownerId));
+        if(dto.ownerId != null) entity.setOwnerId(UUID.fromString(dto.ownerId));
         entity.setScope(collectionScopeMapper.from(dto.scope));
         return entity;
     }
@@ -42,13 +42,13 @@ public class CollectionMapper implements Mapper<CollectionDto, Collection> {
         if(entity == null)
             return null;
         CollectionDto dto = new CollectionDto();
-        dto.id = entity.getId().toString();
+        if(entity.getId() != null) dto.id = entity.getId().toString();
         dto.name = entity.getName();
         dto.order = entity.getOrder();
         dto.createdAt = entity.getCreatedAt();
-        dto.ownerId = entity.getOwnerId().toString();
+        if(entity.getOwnerId() != null) dto.ownerId = entity.getOwnerId().toString();
         dto.scope = collectionScopeMapper.to(entity.getScope());
-        if(isDeepMapping)
+        if(isDeepMapping && movieMapper != null)
             dto.movies = entity.getMovies().stream().map(movieMapper::to).collect(Collectors.toSet());
         return dto;
     }

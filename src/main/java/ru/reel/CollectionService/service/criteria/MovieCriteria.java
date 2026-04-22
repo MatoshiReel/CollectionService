@@ -8,15 +8,15 @@ import java.util.Comparator;
 import java.util.List;
 
 public class MovieCriteria {
-    public static SorterBuilder sort(List<Movie> list) {
+    public static SorterBuilder sort(List<Movie> list) throws NullPointerException {
         return new SorterBuilder(list);
     }
 
-    public static FilterBuilder filter(List<Movie> list) {
+    public static FilterBuilder filter(List<Movie> list) throws NullPointerException {
         return new FilterBuilder(list);
     }
 
-    public static PageBuilder page(List<Movie> list) {
+    public static PageBuilder page(List<Movie> list) throws NullPointerException {
         return new PageBuilder(list);
     }
 
@@ -25,7 +25,9 @@ public class MovieCriteria {
         private boolean isReversed = false;
         private boolean isSorted = false;
 
-        public SorterBuilder(List<Movie> list) {
+        public SorterBuilder(List<Movie> list) throws NullPointerException {
+            if(list == null)
+                throw new NullPointerException();
             this.list = list;
         }
 
@@ -131,7 +133,9 @@ public class MovieCriteria {
         private List<Movie> list;
         private boolean exclude = false;
 
-        public FilterBuilder(List<Movie> list) {
+        public FilterBuilder(List<Movie> list) throws NullPointerException {
+            if(list == null)
+                throw new NullPointerException();
             this.list = list;
         }
 
@@ -167,33 +171,39 @@ public class MovieCriteria {
         }
 
         public FilterBuilder status(String field, String statusOrder) throws UnsuitableCriteriaValueException {
-            try {
-                if(FilteredField.valueOf(field.toUpperCase()).equals(FilteredField.STATUS))
-                    return status(statusOrder);
-            } catch (IllegalArgumentException e) {
-                throw new UnsuitableCriteriaValueException("filter.field", Arrays.stream(FilteredField.values()).map(Enum::name).toList());
+            if(field != null) {
+                try {
+                    if(FilteredField.valueOf(field.toUpperCase()).equals(FilteredField.STATUS))
+                        return status(statusOrder);
+                } catch (IllegalArgumentException e) {
+                    throw new UnsuitableCriteriaValueException("filter.field", Arrays.stream(FilteredField.values()).map(Enum::name).toList());
+                }
             }
             return this;
         }
 
         public FilterBuilder status(String statusOrder) throws UnsuitableCriteriaValueException {
-            try {
-                if(this.exclude)
-                    this.list = list.stream().filter((movie) -> movie.getStatus().getOrder() != Short.parseShort(statusOrder)).toList();
-                else
-                    this.list = list.stream().filter((movie) -> movie.getStatus().getOrder() == Short.parseShort(statusOrder)).toList();
-                return this;
-            } catch (NumberFormatException e) {
-                throw new UnsuitableCriteriaValueException("filter.value", "double variable type");
+            if(statusOrder != null) {
+                try {
+                    if(this.exclude)
+                        this.list = list.stream().filter((movie) -> movie.getStatus().getOrder() != Short.parseShort(statusOrder)).toList();
+                    else
+                        this.list = list.stream().filter((movie) -> movie.getStatus().getOrder() == Short.parseShort(statusOrder)).toList();
+                } catch (NumberFormatException e) {
+                    throw new UnsuitableCriteriaValueException("filter.value", "double variable type");
+                }
             }
+            return this;
         }
 
         public FilterBuilder rating(String field, Double gte, Double lte) throws UnsuitableCriteriaValueException {
-            try {
-                if(FilteredField.valueOf(field.toUpperCase()).equals(FilteredField.RATING))
-                    return rating(gte, lte);
-            } catch (IllegalArgumentException e) {
-                throw new UnsuitableCriteriaValueException("filter.field", Arrays.stream(FilteredField.values()).map(Enum::name).toList());
+            if(field != null) {
+                try {
+                    if(FilteredField.valueOf(field.toUpperCase()).equals(FilteredField.RATING))
+                        return rating(gte, lte);
+                } catch (IllegalArgumentException e) {
+                    throw new UnsuitableCriteriaValueException("filter.field", Arrays.stream(FilteredField.values()).map(Enum::name).toList());
+                }
             }
             return this;
         }
@@ -224,7 +234,9 @@ public class MovieCriteria {
     public static class PageBuilder {
         private List<Movie> list;
 
-        public PageBuilder(List<Movie> list) {
+        public PageBuilder(List<Movie> list) throws NullPointerException {
+            if(list == null)
+                throw new NullPointerException();
             this.list = list;
         }
 

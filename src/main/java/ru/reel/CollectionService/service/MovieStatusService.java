@@ -10,6 +10,7 @@ import java.util.UUID;
 
 @Service
 public class MovieStatusService {
+    public final static String SOURCE_NAME = "status";
     private final MovieStatusRepository repository;
 
     public MovieStatusService(MovieStatusRepository repository) {
@@ -23,10 +24,10 @@ public class MovieStatusService {
     public MovieStatus getById(String id) throws NullPointerException, IllegalArgumentException, SourceNotFoundException {
         if(id == null)
             throw new NullPointerException();
-        return repository.findById(UUID.fromString(id)).orElseThrow(() -> new SourceNotFoundException("status"));
+        return repository.findById(UUID.fromString(id)).orElseThrow(() -> new SourceNotFoundException(SOURCE_NAME));
     }
 
     public MovieStatus getByOrder(short order) throws SourceNotFoundException {
-        return repository.findByOrder(order).orElseThrow(() -> new SourceNotFoundException("status"));
+        return repository.findByOrder(order).orElseThrow(() -> new SourceNotFoundException(SOURCE_NAME));
     }
 }

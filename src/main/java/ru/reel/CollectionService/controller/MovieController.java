@@ -1,6 +1,5 @@
 package ru.reel.CollectionService.controller;
 
-import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -73,6 +72,8 @@ public class MovieController {
             movieDto = movieMapper.to(movieService.getByCatalogIdAndOwnerId(catalogMovieId, accountId), true, collectionMapper);
         } catch(IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(ParamRequestError.builder().param("catalog_id").errorReason(ErrorReason.BAD_UUID).message(ErrorMessageFactory.get(ErrorReason.BAD_UUID)).build());
+        } catch (SourceNotFoundException e) {
+            return ResponseEntity.badRequest().body(RequestError.builder().errorReason(ErrorReason.NOT_FOUND).message(String.format(ErrorMessageFactory.get(ErrorReason.NOT_FOUND), e.getSource())).build());
         }
         if(movieDto == null)
             return ResponseEntity.notFound().build();
@@ -98,7 +99,7 @@ public class MovieController {
         }
         String movieId;
         try {
-            movieId = movieService.save(movieMapper.from(movieDto), collectionService.getById(collectionId));
+            movieId = movieService.save(movieMapper.from(movieDto), collectionId);
         } catch (SourceNotFoundException e) {
             return ResponseEntity.badRequest().body(FieldRequestError.builder().field("scope.id").errorReason(ErrorReason.NOT_FOUND).message(String.format(ErrorMessageFactory.get(ErrorReason.NOT_FOUND), e.getSource())).build());
         }
@@ -113,14 +114,15 @@ public class MovieController {
         if(!errors.isEmpty())
             return ResponseEntity.badRequest().body(errors);
         try {
-            if(!movieService.getOwnerId(movieService.getById(id)).equals(accountId))
+            if(!movieService.getOwnerId(id).equals(accountId))
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(RequestError.builder().errorReason(ErrorReason.OWNER_ACCESS).message(String.format(ErrorMessageFactory.get(ErrorReason.OWNER_ACCESS), "movie")).build());
         } catch (SourceNotFoundException e) {
             return ResponseEntity.badRequest().body(FieldRequestError.builder().field(e.getSource()).errorReason(ErrorReason.NOT_FOUND).message(String.format(ErrorMessageFactory.get(ErrorReason.NOT_FOUND), e.getSource())).build());
         }
         String movieId;
         try {
-            movieId = movieService.update(movieMapper.from(movieDto), id);
+            movieDto.id = id;
+            movieId = movieService.update(movieMapper.from(movieDto, true));
         } catch (SourceNotFoundException e) {
             return ResponseEntity.badRequest().body(FieldRequestError.builder().field("status.id").errorReason(ErrorReason.NOT_FOUND).message(String.format(ErrorMessageFactory.get(ErrorReason.NOT_FOUND), e.getSource())).build());
         }
@@ -141,9 +143,7 @@ public class MovieController {
             return ResponseEntity.badRequest().body(ParamRequestError.builder().param("collection_id").errorReason(ErrorReason.NOT_FOUND).message(String.format(ErrorMessageFactory.get(ErrorReason.NOT_FOUND), e.getSource())).build());
         }
         try {
-            collectionService.deleteMovieRelationById(collectionId, movieService.getById(id));
-            if(movieService.getById(id).getCollections().isEmpty())
-                movieService.deleteById(id);
+            movieService.deleteCollectionRelationById(id, collectionId);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(RequestError.builder().errorReason(ErrorReason.BAD_UUID).message(ErrorMessageFactory.get(ErrorReason.BAD_UUID)).build());
         } catch (SourceNotFoundException e) {

@@ -9,11 +9,11 @@ import java.util.UUID;
 @Component
 public class CollectionStarMapper implements Mapper<CollectionStarDto, CollectionStar> {
     @Override
-    public CollectionStar from(CollectionStarDto dto) {
+    public CollectionStar from(CollectionStarDto dto) throws IllegalArgumentException {
         if(dto == null)
             return null;
         CollectionStar entity = new CollectionStar();
-        entity.setUserId(UUID.fromString(dto.userId));
+        if(dto.userId != null) entity.setUserId(UUID.fromString(dto.userId));
         return entity;
     }
 
@@ -22,9 +22,9 @@ public class CollectionStarMapper implements Mapper<CollectionStarDto, Collectio
         if(entity == null)
             return null;
         CollectionStarDto dto = new CollectionStarDto();
-        dto.id = entity.getId().toString();
-        dto.userId = entity.getUserId().toString();
-        dto.collectionId = entity.getCollection().getId().toString();
+        if(entity.getId() != null) dto.id = entity.getId().toString();
+        if(entity.getUserId() != null) dto.userId = entity.getUserId().toString();
+        if(entity.getCollection() != null && entity.getCollection().getId() != null) dto.collectionId = entity.getCollection().getId().toString();
         return dto;
     }
 }

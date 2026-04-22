@@ -1,6 +1,5 @@
 package ru.reel.CollectionService.controller;
 
-import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -49,8 +48,9 @@ public class CollectionController {
 
     @GetMapping(value = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> getCollectionList(@RequestBody(required = false) Criteria criteria, @RequestHeader("X-Account-Id") String accountId) {
-        List<CollectionDto> collectionsDto = collectionService.getByOwnerId(accountId).stream().map(collectionMapper::to).toList();
+        List<CollectionDto> collectionsDto;
         try {
+            collectionsDto = collectionService.getByOwnerId(accountId).stream().map(collectionMapper::to).toList();
             if(criteria != null && criteria.sort != null) {
                 collectionsDto = CollectionCriteria
                         .sort(new ArrayList<>(collectionsDto.stream().map((dto) -> collectionMapper.from(dto, true)).toList()))
@@ -64,6 +64,8 @@ public class CollectionController {
                         .page(new ArrayList<>(collectionsDto.stream().map((dto) -> collectionMapper.from(dto, true)).toList()))
                         .get(criteria.page.index, criteria.page.items).stream().map(collectionMapper::to).toList();
             }
+        } catch (SourceNotFoundException e) {
+            return ResponseEntity.badRequest().body(RequestError.builder().errorReason(ErrorReason.NOT_FOUND).message(String.format(ErrorMessageFactory.get(ErrorReason.NOT_FOUND), e.getSource())).build());
         } catch (UnsuitableCriteriaValueException e) {
             return ResponseEntity.badRequest().body(FieldRequestError.builder().field(e.getProperty()).errorReason(ErrorReason.NOT_SUIT).message(e.getMessage()).build());
         }
@@ -145,12 +147,13 @@ public class CollectionController {
         List<FieldRequestError> errors = validator.validateBeforeUpdating(collectionDto);
         if(!errors.isEmpty())
             return ResponseEntity.badRequest().body(errors);
+        collectionDto.id = id;
         collectionDto.ownerId = accountId;
         if(collectionDto.name != null)
             collectionDto.name = collectionDto.name.trim();
         String collectionId;
         try {
-            collectionId = collectionService.update(collectionMapper.from(collectionDto), id);
+            collectionId = collectionService.update(collectionMapper.from(collectionDto, true));
         } catch (SourceNotFoundException e) {
             return ResponseEntity.badRequest().body(FieldRequestError.builder().field(e.getSource()).errorReason(ErrorReason.NOT_FOUND).message(String.format(ErrorMessageFactory.get(ErrorReason.NOT_FOUND), e.getSource())).build());
         }

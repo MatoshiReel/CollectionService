@@ -8,11 +8,11 @@ import java.util.Comparator;
 import java.util.List;
 
 public class CollectionCriteria {
-    public static SorterBuilder sort(List<Collection> list) {
+    public static SorterBuilder sort(List<Collection> list) throws NullPointerException {
         return new SorterBuilder(list);
     }
 
-    public static PageBuilder page(List<Collection> list) {
+    public static PageBuilder page(List<Collection> list) throws NullPointerException {
         return new PageBuilder(list);
     }
 
@@ -21,7 +21,9 @@ public class CollectionCriteria {
         private boolean isReversed = false;
         private boolean isSorted = false;
 
-        public SorterBuilder(List<Collection> list) {
+        public SorterBuilder(List<Collection> list) throws NullPointerException {
+            if(list == null)
+                throw new NullPointerException();
             this.list = list;
         }
 
@@ -141,7 +143,9 @@ public class CollectionCriteria {
     public static class PageBuilder {
         private List<Collection> list;
 
-        public PageBuilder(List<Collection> list) {
+        public PageBuilder(List<Collection> list) throws NullPointerException {
+            if(list == null)
+                throw new NullPointerException();
             this.list = list;
         }
 

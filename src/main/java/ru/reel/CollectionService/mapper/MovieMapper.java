@@ -25,7 +25,7 @@ public class MovieMapper implements Mapper<MovieDto, Movie> {
             return null;
         Movie entity = new Movie();
         if(isIdInclude && dto.id != null) entity.setId(UUID.fromString(dto.id));
-        entity.setCatalogId(UUID.fromString(dto.catalogId));
+        if(dto.catalogId != null) entity.setCatalogId(UUID.fromString(dto.catalogId));
         entity.setOwnerRating(dto.ownerRating);
         entity.setStatus(movieStatusMapper.from(dto.status));
         return entity;
@@ -40,11 +40,11 @@ public class MovieMapper implements Mapper<MovieDto, Movie> {
         if(entity == null)
             return null;
         MovieDto dto = new MovieDto();
-        dto.id = entity.getId().toString();
-        dto.catalogId = entity.getCatalogId().toString();
+        if(entity.getId() != null) dto.id = entity.getId().toString();
+        if(entity.getCatalogId() != null) dto.catalogId = entity.getCatalogId().toString();
         dto.ownerRating = entity.getOwnerRating();
         dto.status = movieStatusMapper.to(entity.getStatus());
-        if(isDeepMapping)
+        if(isDeepMapping && collectionMapper != null)
             dto.collections = entity.getCollections().stream().map(collectionMapper::to).collect(Collectors.toSet());
         return dto;
     }
